@@ -19,10 +19,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class tela extends JFrame {
 		JFrame Janela = new JFrame();
 		JPanel main = new JPanel();
+		JLabel LblImg = new JLabel();
 	
 		public tela() {
 		super("Processamento Digital de Imagens");
-			Janela.setPreferredSize(new Dimension(800, 600));
+			
 			Janela.setResizable(false);
 			adicionamenu();
 			adicionatela();
@@ -35,13 +36,15 @@ public class tela extends JFrame {
 		public void adicionamenu(){
 			
 			JMenuBar menuBar;
-			JMenu marquivo,mnAjuda;
-			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre;
+			JMenu marquivo,mnAjuda,mnferramentas;
+			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre,histogramaAction,grayscaleAction;
 			
+			//Sobre
 			mntmSobre = new JMenuItem("Sobre");
 			mnAjuda = new JMenu("Ajuda");
 			mnAjuda.add(mntmSobre);			
 			
+			//Arquivo
 			marquivo = new JMenu("Arquivos");
 			preferenciasAction = new JMenuItem("Preferencias");
 			abrirAction = new JMenuItem("Abrir");
@@ -59,67 +62,58 @@ public class tela extends JFrame {
 	        });
 			
 			salvarAction.addActionListener(new ActionListener() {
-				String NomeArq;
 	            public void actionPerformed(ActionEvent arg0) {
-	            	JFileChooser salvar = new JFileChooser();
-	            	int resultado = salvar.showSaveDialog(null);
-	            	if (resultado == JFileChooser.APPROVE_OPTION) {
-	            		NomeArq = salvar.getSelectedFile().getAbsolutePath();
-	            		if (!NomeArq.endsWith(".jpg")){       
-	            	        NomeArq += ".jpg"; 
-	            	  }
-	        		}
-	            	OutputStream output = null;
-					try {
-						output = new FileOutputStream(NomeArq);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 	            	utils.view.imagem imagem = new utils.view.imagem();
-	            	try {
-						imagem.salvaImagem(main,"jpg",output);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	            	
+	            	imagem.salvar(LblImg);	            	
 	            }
 	        });
 			
 			abrirAction.addActionListener(new ActionListener(){
-				private String caminho;
 				public void actionPerformed(ActionEvent arg0) {
-					JFileChooser abrir = new JFileChooser();
-					abrir.setFileFilter(new FileNameExtensionFilter("Image files", "bmp", "png", "jpg", "jpeg"));
-					abrir.setAcceptAllFileFilterUsed(false);
-					int retorno = abrir.showOpenDialog(null);  
-						if (retorno==JFileChooser.APPROVE_OPTION)  
-							caminho = abrir.getSelectedFile().getAbsolutePath();
-							utils.view.imagem imagem = new utils.view.imagem();
-							try {
-								Image image = imagem.leImagem(caminho);
-								alteramain(image);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
+				   	utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.abrir());
+				}
+			});
+
+			
+			//Ferramentas
+			mnferramentas = new JMenu("Ferramentas");
+			grayscaleAction = new JMenuItem("Escala de Cinza");
+			histogramaAction = new JMenuItem("Histograma");
+			mnferramentas.add(histogramaAction);
+			mnferramentas.add(grayscaleAction);
+			
+			histogramaAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.histograma(LblImg));
 						}
 				});
+			grayscaleAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.grayscale(LblImg));
+					}
+				});
+			
+
+			
 			
 			menuBar = new JMenuBar();
 			menuBar.add(marquivo);
 			menuBar.add(mnAjuda);
+			menuBar.add(mnferramentas);
 			
 			Janela.setJMenuBar(menuBar);
 		}
 		
 		public void alteramain(Image imagem){
-					imagem = imagem.getScaledInstance(800, 600, Image.SCALE_DEFAULT);
+					if (imagem != null){
 					main.removeAll();
-					JLabel label = new JLabel(new ImageIcon(imagem));
-					main.add(label, BorderLayout.CENTER);
+					imagem = imagem.getScaledInstance(800, 600, Image.SCALE_DEFAULT);
+					LblImg = new JLabel(new ImageIcon(imagem));
+					main.add(LblImg, BorderLayout.CENTER);
+					}
 					main.updateUI();
 					
 			}
