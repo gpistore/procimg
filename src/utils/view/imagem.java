@@ -13,7 +13,11 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class imagem {
 	Image imagem;
@@ -93,20 +97,35 @@ public class imagem {
         	        
         	      }
         	    }
-		return image;
+         return image;
 	}
 	
-	public Image histograma (Component component){
-		
-//		BufferedImage image = new BufferedImage(this.grayscale(component);
-//		int width = image.getWidth();
-//        int height =image.getHeight();
-//        for(int i=0; i<height; i++){
-//       	 for(int j=0; j<width; j++){
-		
-		
-		return imagem;
-//	}}
+	public void histograma (Component component){
+		int[] histograma = new int[256];
+		 int width = component.getWidth();  
+         int height = component.getHeight();  
+         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+         Graphics graphics = image.getGraphics();
+         component.paintAll(graphics);
+         graphics.dispose();
+         width = image.getWidth();
+         height =image.getHeight();
+         for(int i=0; i<height; i++){
+        	 for(int j=0; j<width; j++){
+        		Color cor = new Color(image.getRGB(j, i));
+        	      int red = (int)(cor.getRed() * 0.3);
+        	      int green = (int)(cor.getGreen() * 0.59);
+        	      int blue = (int)(cor.getBlue() * 0.11);
+        	      int soma = red + green + blue;
+        	      histograma[soma]++;
+        	  }
+         }
+         
+         DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+         for(int i=0;i<255;i++){
+        	 dataset.addValue( histograma[i] , "" , Integer.toString(i));	 
+         }
+         utils.view.graphs grafico = new utils.view.graphs("Histograma",dataset);
 }
 	
 	

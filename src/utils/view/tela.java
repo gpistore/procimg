@@ -86,7 +86,7 @@ public class tela extends JFrame {
 			histogramaAction.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					utils.view.imagem imagem = new utils.view.imagem();
-					alteramain(imagem.histograma(LblImg));
+					imagem.histograma(LblImg);
 						}
 				});
 			grayscaleAction.addActionListener(new ActionListener(){
