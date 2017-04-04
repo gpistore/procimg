@@ -25,6 +25,7 @@ public class tela extends JFrame {
 		super("Processamento Digital de Imagens");
 			
 			Janela.setResizable(false);
+			Janela.setTitle("PEINTE");
 			adicionamenu();
 			adicionatela();
 			Janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
@@ -36,8 +37,9 @@ public class tela extends JFrame {
 		public void adicionamenu(){
 			
 			JMenuBar menuBar;
-			JMenu marquivo,mnAjuda,mnferramentas;
-			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre,histogramaAction,grayscaleAction;
+			JMenu mnArquivo,mnAjuda,mnFerramentas,mnFiltro;
+			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre,histogramaAction,grayscaleAction,corrigeAction,media3Action,media3PAction,media5Action,media5PAction,
+			correlacaoAction,convolucaoAction;
 			
 			//Sobre
 			mntmSobre = new JMenuItem("Sobre");
@@ -45,15 +47,15 @@ public class tela extends JFrame {
 			mnAjuda.add(mntmSobre);			
 			
 			//Arquivo
-			marquivo = new JMenu("Arquivos");
+			mnArquivo = new JMenu("Arquivos");
 			preferenciasAction = new JMenuItem("Preferencias");
 			abrirAction = new JMenuItem("Abrir");
 			salvarAction = new JMenuItem("Salvar");
 			sairAction = new JMenuItem("Sair");
-			marquivo.add(preferenciasAction);
-			marquivo.add(abrirAction);
-			marquivo.add(salvarAction);
-			marquivo.add(sairAction);
+			mnArquivo.add(preferenciasAction);
+			mnArquivo.add(abrirAction);
+			mnArquivo.add(salvarAction);
+			mnArquivo.add(sairAction);
 			
 			sairAction.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent arg0) {
@@ -77,11 +79,16 @@ public class tela extends JFrame {
 
 			
 			//Ferramentas
-			mnferramentas = new JMenu("Ferramentas");
+			mnFerramentas = new JMenu("Ferramentas");
 			grayscaleAction = new JMenuItem("Escala de Cinza");
+			corrigeAction = new JMenuItem("Corrige");
 			histogramaAction = new JMenuItem("Histograma");
-			mnferramentas.add(histogramaAction);
-			mnferramentas.add(grayscaleAction);
+			
+			mnFerramentas.add(histogramaAction);
+			mnFerramentas.add(grayscaleAction);
+			mnFerramentas.add(corrigeAction);
+			
+			
 			
 			histogramaAction.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
@@ -96,13 +103,82 @@ public class tela extends JFrame {
 					}
 				});
 			
+			corrigeAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.corrige(LblImg));
+					}
+				});
 
+			
+			mnFiltro =  new JMenu("Filtros");
+			media3Action = new JMenuItem("Média 3X3");
+			media3PAction = new JMenuItem("Média 3X3 Ponderada");
+			media5Action = new JMenuItem("Média 5X5");
+			media5PAction = new JMenuItem("Média 5X5 Ponderada");
+			correlacaoAction = new JMenuItem("Correlação");
+			convolucaoAction = new JMenuItem("Convolução");
+			
+			
+			mnFiltro.add(media3Action);
+			mnFiltro.add(media3PAction);
+			mnFiltro.add(media5Action);
+			mnFiltro.add(media5PAction);
+			mnFiltro.add(correlacaoAction);
+			mnFiltro.add(convolucaoAction);
+			
+			media3Action.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,0));
+					}
+				});
+			
+			
+			media3PAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,1));
+					}
+				});
+			
+			
+			media5Action.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,2));
+					}
+				});
+			
+			
+			media5PAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,3));
+					}
+				});
+			
+			correlacaoAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,4));
+					}
+				});
+			
+			convolucaoAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,5));
+					}
+				});
+			
 			
 			
 			menuBar = new JMenuBar();
-			menuBar.add(marquivo);
+			menuBar.add(mnArquivo);
 			menuBar.add(mnAjuda);
-			menuBar.add(mnferramentas);
+			menuBar.add(mnFerramentas);
+			menuBar.add(mnFiltro);
 			
 			Janela.setJMenuBar(menuBar);
 		}

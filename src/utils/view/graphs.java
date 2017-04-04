@@ -11,23 +11,27 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.Rotation;
 
 public class graphs extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	public graphs(String chartTitle, DefaultCategoryDataset dataset) {
+	public graphs(String chartTitle, XYSeries series) {
 		super("Procimg");
 
 		// com base no conjunto de dados que criamos o gráfico
-		JFreeChart chart = createChart(dataset, chartTitle);
+		JFreeChart chart = createChart(series, chartTitle);
 
 		// vamos colocar o gráfico em um painel
 		ChartPanel chartPanel = new ChartPanel(chart);
@@ -43,28 +47,18 @@ public class graphs extends JFrame {
 
 	}
 
-
-
 	/**
 	 * Cria um gráfico 
 	 */
 
-	private JFreeChart createChart(DefaultCategoryDataset dataset, String title) {
+	private JFreeChart createChart(XYSeries  series, String title) {
+		
+		XYSeriesCollection data = new XYSeriesCollection(series);
+		// Create an XY Line chart
 
-		JFreeChart chart = ChartFactory.createLineChart( 
-				title,
-				"Luminosidade",
-				"Número de Pixels", 
-				dataset, // dados
-				PlotOrientation.VERTICAL,
-				true, // include lenda
-				true, false);
-		NumberAxis xAxis = new NumberAxis();
-		xAxis.setTickUnit(new NumberTickUnit(2));
-
-		// Assign it to the chart
-		XYPlot plot = (XYPlot) chart.getPlot();
-		plot.setDomainAxis(xAxis);
+		JFreeChart chart = ChartFactory.createXYLineChart(title, "Luminosidade", "Número de Pixels", data,
+		                                                  PlotOrientation.VERTICAL, 
+		                                                  true, true, false);
 		return chart;
 
 	}
