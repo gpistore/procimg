@@ -30,7 +30,7 @@ public class tela extends JFrame {
 			adicionatela();
 			Janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 			Janela.pack();
-			Janela.setSize(850, 700);
+			Janela.setSize(1300, 1024);
 			Janela.setVisible(true);
 	}
 		
@@ -39,7 +39,7 @@ public class tela extends JFrame {
 			JMenuBar menuBar;
 			JMenu mnArquivo,mnAjuda,mnFerramentas,mnFiltro;
 			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre,histogramaAction,grayscaleAction,corrigeAction,media3Action,media3PAction,media5Action,media5PAction,
-			correlacaoAction,convolucaoAction;
+			passaAltaAction,convolucaoAction;
 			
 			//Sobre
 			mntmSobre = new JMenuItem("Sobre");
@@ -112,11 +112,11 @@ public class tela extends JFrame {
 
 			
 			mnFiltro =  new JMenu("Filtros");
-			media3Action = new JMenuItem("Média 3X3");
-			media3PAction = new JMenuItem("Média 3X3 Ponderada");
-			media5Action = new JMenuItem("Média 5X5");
-			media5PAction = new JMenuItem("Média 5X5 Ponderada");
-			correlacaoAction = new JMenuItem("Correlação");
+			media3Action = new JMenuItem("Passa-Baixa 3X3");
+			media3PAction = new JMenuItem("Passa-Baixa 3X3 Ponderada");
+			media5Action = new JMenuItem("Passa-Baixa 5X5");
+			media5PAction = new JMenuItem("Passa-Baixa 5X5 Ponderada");
+			passaAltaAction = new JMenuItem("Passa-Alta ");
 			convolucaoAction = new JMenuItem("Convolução");
 			
 			
@@ -124,7 +124,7 @@ public class tela extends JFrame {
 			mnFiltro.add(media3PAction);
 			mnFiltro.add(media5Action);
 			mnFiltro.add(media5PAction);
-			mnFiltro.add(correlacaoAction);
+			mnFiltro.add(passaAltaAction);
 			mnFiltro.add(convolucaoAction);
 			
 			media3Action.addActionListener(new ActionListener(){
@@ -158,7 +158,7 @@ public class tela extends JFrame {
 					}
 				});
 			
-			correlacaoAction.addActionListener(new ActionListener(){
+			passaAltaAction.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					utils.view.imagem imagem = new utils.view.imagem();
 					alteramain(imagem.filtrar(LblImg,4));
@@ -186,7 +186,11 @@ public class tela extends JFrame {
 		public void alteramain(Image imagem){
 					if (imagem != null){
 					main.removeAll();
-					imagem = imagem.getScaledInstance(800, 600, Image.SCALE_DEFAULT);
+					int width = imagem.getWidth(Janela);
+					int heigth = imagem.getHeight(Janela);
+					if (width > 1024 || heigth > 768){
+						imagem = imagem.getScaledInstance(1024, 768, Image.SCALE_DEFAULT);
+					}
 					LblImg = new JLabel(new ImageIcon(imagem));
 					main.add(LblImg, BorderLayout.CENTER);
 					}

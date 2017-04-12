@@ -182,11 +182,11 @@ public class imagem {
         for(int i=0; i<height; i++){
         	for(int j=0; j<width; j++){
         		Color cor = new Color(image.getRGB(j, i));
-   	      		int red = (int)(cor.getRed() * 0.3);
-   	      		int green = (int)(cor.getGreen() * 0.59);
-   	      		int blue = (int)(cor.getBlue() * 0.11);
-   	      		int soma = red + green + blue;
-   	      		img [i][j] = soma;
+   	      		double red = (cor.getRed() * 0.3);
+   	      		double green = (cor.getGreen() * 0.59);
+   	      		double blue = (cor.getBlue() * 0.11);
+   	      		double soma = (red + green + blue);
+   	      		img [i][j] = (int)soma;
        	 	}
     	}
         
@@ -208,11 +208,10 @@ public class imagem {
         		break;
         	}
         	case 4:{
-        		img = filtro.correlacao(img);
+        		img = filtro.passaAlta(img);
         		break;
         	}
         	case 5:{
-        		img = filtro.convolucao(img);
         		break;
         	}
         	default:{
