@@ -212,6 +212,7 @@ public class imagem {
         		break;
         	}
         	case 5:{
+        		img = filtro.convolucao(img);
         		break;
         	}
         	default:{

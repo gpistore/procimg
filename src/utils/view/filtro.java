@@ -176,4 +176,45 @@ public class filtro {
 		}
 	
 
+	   
+	   
+	  public int[][] convolucao(int[][]img){ 
+	    
+    	int lin = img.length;
+		int col = img[0].length;
+		int img2[][] = new int[lin][col];
+			for (int i=1;i<img.length-1;i++){ 
+		      for (int j=1;j<img[i].length-1;j++){ 
+		    	  double soma = ( 	(img[i-1][j-1]*-1)  + 
+		    			  			(img[i-1][j]*0.0)  	+ 
+		    			  			(img[i-1][j+1])    	+   
+		    			  			(img[i][j-1]*-2.0)  + 
+		    			  			(img[i][j]*1.0)  	+ 
+		    			  			(img[i][j+1]*2.0)  	+   
+		    			  			(img[i+1][j-1]*-1)  + 
+		    			  			(img[i+1][j]*0.0)  	+ 
+		    			  			(img[i+1][j+1]) 
+			                	); 
+		        	img2[i][j]= tratasoma(soma); 
+		        }
+			}
+			for (int i=1;i<img2.length-1;i++){ 
+		      for (int j=1;j<img2[i].length-1;j++){ 
+		    	  double soma = (	(img2[i-1][j-1]*-1) + 
+		    			  			(img2[i-1][j]*0.0)  + 
+		    			  			(img2[i-1][j+1]-1)  +   
+		    			  			(img2[i][j-1]*2.0)  + 
+		    			  			(img2[i][j])  		+ 
+		    			  			(img2[i][j+1]*-2.0) +   
+		    			  			(img2[i+1][j-1]*1)  + 
+		    			  			(img2[i+1][j]*0.0)  + 
+		    			  			(img2[i+1][j+1]*-1) 
+		    			  		); 
+		    	  img[i][j]= tratasoma(soma); 
+		       } 
+		    }
+		  	return img; 
+	  } 
+	
+
 }
