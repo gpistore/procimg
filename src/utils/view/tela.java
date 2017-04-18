@@ -20,6 +20,7 @@ public class tela extends JFrame {
 		JFrame Janela = new JFrame();
 		JPanel main = new JPanel();
 		JLabel LblImg = new JLabel();
+		JLabel Lblanterior = new JLabel();
 	
 		public tela() {
 		super("Processamento Digital de Imagens");
@@ -37,9 +38,9 @@ public class tela extends JFrame {
 		public void adicionamenu(){
 			
 			JMenuBar menuBar;
-			JMenu mnArquivo,mnAjuda,mnFerramentas,mnFiltro;
+			JMenu mnArquivo,mnAjuda,mnFerramentas,mnFiltro,mnpassabaixa,mnmediana;
 			JMenuItem preferenciasAction, sairAction,abrirAction,salvarAction,mntmSobre,histogramaAction,grayscaleAction,corrigeAction,media3Action,media3PAction,media5Action,media5PAction,
-			passaAltaAction,convolucaoAction;
+			passaAltaAction,convolucaoAction,mediana5Action,mediana7Action,desfazerAction;
 			
 			//Sobre
 			mntmSobre = new JMenuItem("Sobre");
@@ -83,10 +84,14 @@ public class tela extends JFrame {
 			grayscaleAction = new JMenuItem("Escala de Cinza");
 			corrigeAction = new JMenuItem("Corrige");
 			histogramaAction = new JMenuItem("Histograma");
+			desfazerAction = new JMenuItem("Desfazer");
+			
+		
 			
 			mnFerramentas.add(histogramaAction);
 			mnFerramentas.add(grayscaleAction);
 			mnFerramentas.add(corrigeAction);
+			mnFerramentas.add(desfazerAction);
 			
 			
 			
@@ -109,23 +114,40 @@ public class tela extends JFrame {
 					alteramain(imagem.corrige(LblImg));
 					}
 				});
+			
+			desfazerAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					desfazer();
+					}
+				});
 
 			
-			mnFiltro =  new JMenu("Filtros");
+			
+			mnmediana = new JMenu("Mediana");
+			mediana5Action = new JMenuItem("5X5");
+			mediana7Action = new JMenuItem("7X7");
+			mnmediana.add(mediana5Action);
+			mnmediana.add(mediana7Action);
+			
+			
+			mnpassabaixa = new JMenu("Passa-Baixa");
 			media3Action = new JMenuItem("Passa-Baixa 3X3");
 			media3PAction = new JMenuItem("Passa-Baixa 3X3 Ponderada");
 			media5Action = new JMenuItem("Passa-Baixa 5X5");
 			media5PAction = new JMenuItem("Passa-Baixa 5X5 Ponderada");
+			mnpassabaixa.add(media3Action);
+			mnpassabaixa.add(media3PAction);
+			mnpassabaixa.add(media5Action);
+			mnpassabaixa.add(media5PAction);
+			
 			passaAltaAction = new JMenuItem("Passa-Alta ");
 			convolucaoAction = new JMenuItem("Convolução");
 			
-			
-			mnFiltro.add(media3Action);
-			mnFiltro.add(media3PAction);
-			mnFiltro.add(media5Action);
-			mnFiltro.add(media5PAction);
+			mnFiltro =  new JMenu("Filtros");
+			mnFiltro.add(mnpassabaixa);
 			mnFiltro.add(passaAltaAction);
 			mnFiltro.add(convolucaoAction);
+			mnFiltro.add(mnmediana);
 			
 			media3Action.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
@@ -171,6 +193,18 @@ public class tela extends JFrame {
 					alteramain(imagem.filtrar(LblImg,5));
 					}
 				});
+			mediana5Action.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,6));
+					}
+				});
+			mediana7Action.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,7));
+					}
+				});
 			
 			
 			
@@ -185,11 +219,12 @@ public class tela extends JFrame {
 		
 		public void alteramain(Image imagem){
 					if (imagem != null){
+					Lblanterior = LblImg;
 					main.removeAll();
 					int width = imagem.getWidth(Janela);
 					int heigth = imagem.getHeight(Janela);
 					if (width > 1024 || heigth > 768){
-						imagem = imagem.getScaledInstance(1024, 768, Image.SCALE_DEFAULT);
+						imagem = imagem.getScaledInstance(width, heigth, Image.SCALE_SMOOTH);
 					}
 					LblImg = new JLabel(new ImageIcon(imagem));
 					main.add(LblImg, BorderLayout.CENTER);
@@ -197,6 +232,14 @@ public class tela extends JFrame {
 					main.updateUI();
 					
 			}
+		
+		public void desfazer(){
+			LblImg= Lblanterior ;
+			main.removeAll();
+			main.add(LblImg, BorderLayout.CENTER);
+			main.updateUI();
+		}
+		
 		public void adicionatela(){
 				Janela.add(main);
 				main.setVisible(true);

@@ -29,7 +29,7 @@ public class imagem {
 	
 	public Image abrir(){
 		String caminho = null;
-		JFileChooser abrir = new JFileChooser();
+		JFileChooser abrir = new JFileChooser("C:/OneDrive/Imagens");
 		abrir.setFileFilter(new FileNameExtensionFilter("Image files", "bmp", "png", "jpg", "jpeg"));
 		abrir.setAcceptAllFileFilterUsed(false);
 		int retorno = abrir.showOpenDialog(null);  
@@ -174,7 +174,9 @@ public class imagem {
 		filtro filtro = new filtro();
 		int width = component.getWidth();  
         int height = component.getHeight();
-		int[][] img = new int[height][width];
+		int[][] arrayred = new int[height][width];
+		int[][] arraygreen = new int[height][width];
+		int[][] arrayblue = new int[height][width];
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
         component.paintAll(graphics);
@@ -182,37 +184,59 @@ public class imagem {
         for(int i=0; i<height; i++){
         	for(int j=0; j<width; j++){
         		Color cor = new Color(image.getRGB(j, i));
-   	      		double red = (cor.getRed() * 0.3);
-   	      		double green = (cor.getGreen() * 0.59);
-   	      		double blue = (cor.getBlue() * 0.11);
-   	      		double soma = (red + green + blue);
-   	      		img [i][j] = (int)soma;
+   	      		arrayred[i][j] = cor.getRed();
+   	      		arraygreen[i][j] = cor.getGreen(); 
+   	      		arrayblue[i][j] = cor.getBlue(); 
        	 	}
     	}
         
         switch(cdfiltro){
         	case 0:{
-        		img = filtro.media3(img);
+        		arrayred = filtro.media3(arrayred);
+        		arraygreen = filtro.media3(arraygreen);
+        		arrayblue = filtro.media3(arrayblue);
         		break;
         	}
         	case 1:{
-        		img = filtro.media3p(img);
+        		arrayred = filtro.media3p(arrayred);
+        		arraygreen = filtro.media3p(arraygreen);
+        		arrayblue = filtro.media3p(arrayblue);
         		break;
         	}
         	case 2:{
-        		img = filtro.media5(img);
+        		arrayred = filtro.media5(arrayred);
+        		arraygreen = filtro.media5(arraygreen);
+        		arrayblue = filtro.media5(arrayblue);
         		break;
         	}
         	case 3:{
-        		img = filtro.media5p(img);
+        		arrayred = filtro.media5p(arrayred);
+        		arraygreen = filtro.media5p(arraygreen);
+        		arrayblue = filtro.media5p(arrayblue);
         		break;
         	}
         	case 4:{
-        		img = filtro.passaAlta(img);
+        		arrayred = filtro.passaAlta(arrayred);
+        		arraygreen = filtro.passaAlta(arraygreen);
+        		arrayblue = filtro.passaAlta(arrayblue);
         		break;
         	}
         	case 5:{
-        		img = filtro.convolucao(img);
+        		arrayred = filtro.convolucao(arrayred);
+        		arraygreen = filtro.convolucao(arraygreen);
+        		arrayblue = filtro.convolucao(arrayblue);
+        		break;
+        	}
+        	case 6:{
+        		arrayred = filtro.mediana5(arrayred);
+        		arraygreen = filtro.mediana5(arraygreen);
+        		arrayblue = filtro.mediana5(arrayblue);
+        		break;
+        	}
+        	case 7:{
+        		arrayred = filtro.mediana7(arrayred);
+        		arraygreen = filtro.mediana7(arraygreen);
+        		arrayblue = filtro.mediana7(arrayblue);        		
         		break;
         	}
         	default:{
@@ -221,7 +245,7 @@ public class imagem {
         }
         for(int i=0; i<height; i++){
         	for(int j=0; j<width; j++){
-        		Color novaCor = new Color(img [i][j],img [i][j],img [i][j]);
+        		Color novaCor = new Color(arrayred [i][j],arraygreen [i][j],arrayblue [i][j]);
     	        image.setRGB(j,i,novaCor.getRGB());
        	 	}
     	}

@@ -215,6 +215,104 @@ public class filtro {
 		    }
 		  	return img; 
 	  } 
-	
-
+	  
+		public int[][] mediana5(int[][]img){
+			int lin = img.length;
+			int col = img[0].length;
+			int img2[][] = new int[lin][col];
+			for (int i=2;i<img.length-2;i++){
+				for (int j=2;j<img[i].length-2;j++){
+					double[] valores = {img[i-2][j-2],
+										img[i-2][j-1],
+										img[i-2][j],
+										img[i-2][j+1],
+										img[i-2][j+2],
+										img[i-1][j-2],
+										img[i-1][j-1],
+										img[i-1][j],
+										img[i-1][j+1],
+										img[i-1][j+2],
+										img[i][j-2],
+										img[i][j-1],
+										img[i][j],
+										img[i][j+1],
+										img[i][j+2],
+										img[i+1][j-2],
+										img[i+1][j-1],
+										img[i+1][j],
+										img[i+1][j+1],
+										img[i+1][j+2],
+										img[i+2][j-2],
+										img[i+2][j-1],
+										img[i+2][j],
+										img[i+2][j+1],
+										img[i+2][j+2]};
+					Arrays.sort(valores);
+					img2[i][j]= tratasoma(valores[12]);
+				}
+			}
+			return img2;
+		}
+		public int[][] mediana7(int[][]img){
+			int lin = img.length;
+			int col = img[0].length;
+			int img2[][] = new int[lin][col];
+			for (int i=3;i<img.length-3;i++){
+				for (int j=3;j<img[i].length-3;j++){
+					double[] valores = {img[i-3][j-3],
+										img[i-3][j-2],
+										img[i-3][j-1],
+										img[i-3][j],
+										img[i-3][j+1],
+										img[i-3][j+2],
+										img[i-3][j+3],
+										img[i-2][j-3],
+										img[i-2][j-2],
+										img[i-2][j-1],
+										img[i-2][j],
+										img[i-2][j+1],
+										img[i-2][j+2],
+										img[i-2][j+3],
+										img[i-1][j-3],
+										img[i-1][j-2],
+										img[i-1][j-1],
+										img[i-1][j],
+										img[i-1][j+1],
+										img[i-1][j+2],
+										img[i-1][j+3],
+										img[i][j-3],
+										img[i][j-2],
+										img[i][j-1],
+										img[i][j],
+										img[i][j+1],
+										img[i][j+2],
+										img[i][j+3],
+										img[i+1][j-3],
+										img[i+1][j-2],
+										img[i+1][j-1],
+										img[i+1][j],
+										img[i+1][j+1],
+										img[i+1][j+2],
+										img[i+1][j+3],
+										img[i+2][j-3],
+										img[i+2][j-2],
+										img[i+2][j-1],
+										img[i+2][j],
+										img[i+2][j+1],
+										img[i+2][j+2],
+										img[i+2][j+3],
+										img[i+3][j-3],
+										img[i+3][j-2],
+										img[i+3][j-1],
+										img[i+3][j],
+										img[i+3][j+1],
+										img[i+3][j+2],
+										img[i+3][j+3]};
+					Arrays.sort(valores);
+					img2[i][j]= tratasoma(valores[24]);
+				}
+			}
+			return img2;
+		}
+		
 }
