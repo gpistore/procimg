@@ -3,6 +3,7 @@ package utils.view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,29 +22,45 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 
 public class imagem {
+	
 	Image imagem;
+	
+	private BufferedImage comp2img (Component c){
+		int width = c.getWidth();  
+        int height = c.getHeight();  
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = image.getGraphics();
+        c.paintAll(graphics);
+        graphics.dispose();
+        return image;
+	}
+	
 	public Image leImagem(String caminho) throws IOException{
 		File sourceimage = new File(caminho);
 		return imagem = ImageIO.read(sourceimage);
 	}
 	
-	public Image abrir(){
+	public Image abrir() {
 		String caminho = null;
+		int retorno;
 		JFileChooser abrir = new JFileChooser("C:/OneDrive/Imagens");
+		ImagePreviewPanel preview = new ImagePreviewPanel();
+		abrir.setAccessory(preview);
+		abrir.addPropertyChangeListener(preview);
 		abrir.setFileFilter(new FileNameExtensionFilter("Image files", "bmp", "png", "jpg", "jpeg"));
 		abrir.setAcceptAllFileFilterUsed(false);
-		int retorno = abrir.showOpenDialog(null);  
-			if (retorno==JFileChooser.APPROVE_OPTION){  
-				caminho = abrir.getSelectedFile().getAbsolutePath();
-				utils.view.imagem imagem = new utils.view.imagem();
-				try {
-					return imagem.leImagem(caminho);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		retorno = abrir.showOpenDialog(null);  
+		if (retorno==JFileChooser.APPROVE_OPTION){  
+			caminho = abrir.getSelectedFile().getAbsolutePath();
+			utils.view.imagem imagem = new utils.view.imagem();
+			try {
+				return imagem.leImagem(caminho);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-				return null;
+		}
+			return null;
 	}
 	
 	public void salvar(Component component){
@@ -55,37 +72,32 @@ public class imagem {
     		if (!NomeArq.endsWith(".jpg")){       
     	        NomeArq += ".jpg"; 
     	  }
-		}
-    	OutputStream output = null;
-		try {
-			output = new FileOutputStream(NomeArq);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-    	try {
-		    int width = component.getWidth();  
-	        int height = component.getHeight();  
-	        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	        Graphics graphics = image.getGraphics();
-	        component.paintAll(graphics);
-	        graphics.dispose();
-	        ImageIO.write(image, "jpg", output);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    	OutputStream output = null;
+			try {
+				output = new FileOutputStream(NomeArq);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	try {
+			    int width = component.getWidth();  
+		        int height = component.getHeight();  
+		        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		        Graphics graphics = image.getGraphics();
+		        component.paintAll(graphics);
+		        graphics.dispose();
+		        ImageIO.write(image, "jpg", output);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
 	}
 	
 	public Image grayscale(Component component){
-		 int width = component.getWidth();  
-         int height = component.getHeight();  
-         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-         Graphics graphics = image.getGraphics();
-         component.paintAll(graphics);
-         graphics.dispose();
-         for(int i=0; i<height; i++){
-        	 for(int j=0; j<width; j++){
+		 BufferedImage image = comp2img(component);
+         for(int i=0; i<image.getHeight(); i++){
+        	 for(int j=0; j<image.getWidth(); j++){
         		Color cor = new Color(image.getRGB(j, i));
         	      int red = (int)(cor.getRed() * 0.3);
         	      int green = (int)(cor.getGreen() * 0.59);
@@ -93,7 +105,6 @@ public class imagem {
         	      int soma = red + green + blue;
        	        Color novaCor = new Color(soma,soma,soma);
         	        image.setRGB(j,i,novaCor.getRGB());
-        	        
         	      }
         	    }
          return image;
@@ -101,16 +112,9 @@ public class imagem {
 	
 	public void histograma (Component component){
 		int[] histograma = new int[256];
-		 int width = component.getWidth();  
-         int height = component.getHeight();  
-         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-         Graphics graphics = image.getGraphics();
-         component.paintAll(graphics);
-         graphics.dispose();
-         width = image.getWidth();
-         height =image.getHeight();
-         for(int i=0; i<height; i++){
-        	 for(int j=0; j<width; j++){
+		 BufferedImage image = comp2img(component);
+         for(int i=0; i<image.getHeight(); i++){
+        	 for(int j=0; j<image.getWidth(); j++){
         		Color cor = new Color(image.getRGB(j, i));
         	      int red = (int)(cor.getRed() * 0.3);
         	      int green = (int)(cor.getGreen() * 0.59);
@@ -120,7 +124,7 @@ public class imagem {
         	  }
          }
          
- 		XYSeries series = new XYSeries("Random Data");
+ 		XYSeries series = new XYSeries("Pixels");
  		for(int i=0;i<255;i++){
  			series.add(i,histograma[i]);	 
          }
@@ -251,5 +255,80 @@ public class imagem {
     	}
 		return  image;
 	}
+
+	public Image somar (Component component,Image image){
+		int width =  component.getWidth();  
+        int height = component.getHeight();
+		BufferedImage img1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = img1.getGraphics();
+        component.paintAll(graphics);
+        graphics.dispose();
+		
+        BufferedImage img2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = img2.createGraphics();
+        g.drawImage(image, 0, 0, width, height, null);
+        g.dispose();
+        
+        for(int i=0; i<height; i++){
+        	for(int j=0; j<width; j++){
+        		Color cor1 = new Color(img1.getRGB(j, i));
+        		Color cor2 = new Color(img2.getRGB(j, i));
+         	      
+        		  int red = (int)(cor1.getRed())+(int)(cor2.getRed()) ;
+        		  int green = (int)(cor1.getGreen())+(cor2.getGreen());
+        		  int blue = (int)(cor1.getBlue())+(cor2.getBlue());
+        		  if (red > 255){
+        			  red = 255;
+        		  }
+         	      if (green > 255){
+         	    	  green= 255;
+         	      }
+         	      if (blue> 255){
+          			  blue= 255;
+            	     }
+        	        Color novaCor = new Color(red,green,blue);
+         	        img1.setRGB(j,i,novaCor.getRGB());
+        	}
+       	 }
+		return img1;
+	}
+	
+	public Image subtrair (Component component,Image image){
+		int width =  component.getWidth();  
+        int height = component.getHeight();
+		BufferedImage img1 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = img1.getGraphics();
+        component.paintAll(graphics);
+        graphics.dispose();
+		
+        BufferedImage img2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = img2.createGraphics();
+        g.drawImage(image, 0, 0, width, height, null);
+        g.dispose();
+        
+        for(int i=0; i<height; i++){
+        	for(int j=0; j<width; j++){
+        		Color cor1 = new Color(img1.getRGB(j, i));
+        		Color cor2 = new Color(img2.getRGB(j, i));
+         	      
+        		  int red = (int)(cor1.getRed())-(int)(cor2.getRed()) ;
+        		  int green = (int)(cor1.getGreen())-(cor2.getGreen());
+        		  int blue = (int)(cor1.getBlue())-(cor2.getBlue());
+        		  if (red > 255){
+        			  red = 255;
+        		  }
+         	      if (green > 255){
+         	    	  green= 255;
+         	      }
+         	      if (blue> 255){
+          			  blue= 255;
+            	     }
+        	        Color novaCor = new Color(red,green,blue);
+         	        img1.setRGB(j,i,novaCor.getRGB());
+        	}
+       	 }
+		return img1;
+	}
+	
 }
 

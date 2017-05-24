@@ -8,9 +8,10 @@ public class filtro {
 	private int tratasoma(double soma){
 		if (soma > 255){
 			soma =  255;
-		}
-		if (soma < 0){
-			soma = 0; 
+		}else{
+			if (soma < 0){
+				soma = 0;
+			}	 
 		}
 
 			return (int)soma;
@@ -18,27 +19,24 @@ public class filtro {
 	}
 	
 	public int[][] media3(int[][]img){
-		int lin = img.length;
-		int col = img[0].length;
-		int img2[][] = new int[lin][col];
+		int img2[][] = new int[img.length][img[0].length];
 		for (int i=1;i<img.length-1;i++){
 			for (int j=1;j<img[i].length-1;j++){
-				int soma = (img[i-1][j-1]	+
-							img[i-1][j]		+
-							img[i-1][j+1]	+
-							img[i][j-1]		+
-							img[i][j]		+
-							img[i][j+1]		+
-							img[i+1][j-1]	+
-							img[i+1][j]		+
-							img[i+1][j+1]
-									)/9;
-					img2[i][j]= tratasoma(soma);
-				 
+				img2[i][j]= tratasoma(( img[i-1][j-1]	+
+									  	img[i-1][j]		+
+									  	img[i-1][j+1]	+
+									  	img[i][j-1]		+
+									  	img[i][j]		+
+									  	img[i][j+1]		+
+									  	img[i+1][j-1]	+
+									  	img[i+1][j]		+
+									  	img[i+1][j+1])/9
+									  );
 			}
 		}
 		return img2;
 	}
+	
 	public int[][] media3p(int[][]img){
 		int lin = img.length;
 		int col = img[0].length;

@@ -29,14 +29,8 @@ public class graphs extends JFrame {
 
 	public graphs(String chartTitle, XYSeries series) {
 		super("Procimg");
-
-		// com base no conjunto de dados que criamos o gráfico
 		JFreeChart chart = createChart(series, chartTitle);
-
-		// vamos colocar o gráfico em um painel
 		ChartPanel chartPanel = new ChartPanel(chart);
-
-		// default tamanho
 		chartPanel.setPreferredSize(new java.awt.Dimension(640, 480));
 
 		// adiciona a nossa aplicação
@@ -44,7 +38,6 @@ public class graphs extends JFrame {
 		dialog.add( chartPanel );
 		dialog.pack();
 		dialog.setVisible(true);
-
 	}
 
 	/**
@@ -54,7 +47,6 @@ public class graphs extends JFrame {
 	private JFreeChart createChart(XYSeries  series, String title) {
 		
 		XYSeriesCollection data = new XYSeriesCollection(series);
-		// Create an XY Line chart
 
 		JFreeChart chart = ChartFactory.createXYLineChart(title, "Luminosidade", "Número de Pixels", data,
 		                                                  PlotOrientation.VERTICAL, 
