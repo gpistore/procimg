@@ -40,17 +40,22 @@ public class tela extends JFrame {
 				  desfazerAction = new JMenuItem("Desfazer"),
 				  histogramaAction = new JMenuItem("Histograma"),
 				  grayscaleAction = new JMenuItem("Escala de Cinza"),
-				  corrigeAction = new JMenuItem("Corrige"),
+				  corrigeAction = new JMenuItem("Realce"),
 				  media3Action = new JMenuItem("Passa-Baixa 3X3"),
 				  media3PAction = new JMenuItem("Passa-Baixa 3X3 Ponderada"),
 				  media5Action = new JMenuItem("Passa-Baixa 5X5"),
 				  media5PAction = new JMenuItem("Passa-Baixa 5X5 Ponderada"),
-				  passaAltaAction = new JMenuItem("Passa-Alta "),
-				  convolucaoAction = new JMenuItem("Convolução"),
+				  passaAltaAction = new JMenuItem("Média Harmônica"),
+				  convolucaoAction = new JMenuItem("Sobel"),
 				  mediana5Action = new JMenuItem("5X5"),
 				  mediana7Action = new JMenuItem("7X7"),
+				  modaAction = new JMenuItem("Moda"),
 				  somaAction = new JMenuItem("Soma"),
-				  subtracaoAction = new JMenuItem("Subtração");
+				  subtracaoAction = new JMenuItem("Subtração"),
+				  andAction = new JMenuItem("'E' lógico"),
+				  orAction = new JMenuItem("'OU' lógico"),
+				  xorAction = new JMenuItem("'OU' Exclusivo lógico");
+				
 		
 	
 		
@@ -60,7 +65,7 @@ public class tela extends JFrame {
 			adicionatela();
 			main.setLayout(new BoxLayout(main, BoxLayout.PAGE_AXIS));
 			Janela.setResizable(false);
-			Janela.setTitle("PEINTE");
+			Janela.setTitle("PROCIMG");
 			Janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 			Janela.pack();
 			Janela.setSize(1300, 725);
@@ -153,8 +158,11 @@ public class tela extends JFrame {
 			addmenu(media5PAction,mnPassaBaixa);
 			addmenu(mnPassaBaixa,mnFiltro);
 			addmenu(mnMediana,mnFiltro);
+			addmenu(modaAction,mnFiltro);
 			addmenu(passaAltaAction,mnFiltro);
 			addmenu(convolucaoAction,mnFiltro);
+			
+			
 			
 			media3Action.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
@@ -213,12 +221,22 @@ public class tela extends JFrame {
 				}
 			});
 			
+			modaAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.filtrar(LblImg,8));
+				}
+			});
+			
 		}
 		
 		private void menuOperacoes(){
 			menuBar.add(mnOperacoes);
 			addmenu(somaAction,mnOperacoes);
 			addmenu(subtracaoAction,mnOperacoes);
+			addmenu(andAction,mnOperacoes);
+			addmenu(orAction,mnOperacoes);
+			addmenu(xorAction,mnOperacoes);
 			
 			somaAction.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
@@ -230,6 +248,33 @@ public class tela extends JFrame {
 			});
 			
 			subtracaoAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.popup pops = new utils.view.popup();
+					Image img = pops.abrir();
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.subtrair(LblImg,img));
+				}
+			});
+			
+			andAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.popup pops = new utils.view.popup();
+					Image img = pops.abrir();
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.and(LblImg,img));
+				}
+			});
+			
+			orAction.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0) {
+					utils.view.popup pops = new utils.view.popup();
+					Image img = pops.abrir();
+					utils.view.imagem imagem = new utils.view.imagem();
+					alteramain(imagem.subtrair(LblImg,img));
+				}
+			});
+			
+			xorAction.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent arg0) {
 					utils.view.popup pops = new utils.view.popup();
 					Image img = pops.abrir();

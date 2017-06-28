@@ -1,6 +1,7 @@
 package utils.view;
 
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class filtro {
@@ -67,7 +68,7 @@ public class filtro {
 			for (int j=2;j<img[i].length-2;j++){
 				int soma = (img[i-2][j-2]	+
 							img[i-2][j-1]	+
-							img[i-2][j]	+
+							img[i-2][j]		+
 							img[i-2][j+1]	+
 							img[i-2][j+2]	+
 							img[i-1][j-2]	+
@@ -89,8 +90,7 @@ public class filtro {
 							img[i+2][j-1]	+
 							img[i+2][j]		+
 							img[i+2][j+1]	+
-							img[i+2][j+2]
-									)/25;
+							img[i+2][j+2])/25;
 				img2[i][j]= tratasoma(soma);
 			}
 		}
@@ -187,7 +187,7 @@ public class filtro {
 		    			  			(img[i-1][j]*0.0)  	+ 
 		    			  			(img[i-1][j+1])    	+   
 		    			  			(img[i][j-1]*-2.0)  + 
-		    			  			(img[i][j]*1.0)  	+ 
+		    			  			(img[i][j]*0.0)  	+ 
 		    			  			(img[i][j+1]*2.0)  	+   
 		    			  			(img[i+1][j-1]*-1)  + 
 		    			  			(img[i+1][j]*0.0)  	+ 
@@ -202,7 +202,7 @@ public class filtro {
 		    			  			(img2[i-1][j]*0.0)  + 
 		    			  			(img2[i-1][j+1]-1)  +   
 		    			  			(img2[i][j-1]*2.0)  + 
-		    			  			(img2[i][j])  		+ 
+		    			  			(img2[i][j]*0)  		+ 
 		    			  			(img2[i][j+1]*-2.0) +   
 		    			  			(img2[i+1][j-1]*1)  + 
 		    			  			(img2[i+1][j]*0.0)  + 
@@ -251,6 +251,56 @@ public class filtro {
 			}
 			return img2;
 		}
+		
+		public int[][] moda(int[][]img){
+			int[] valores = new int[256];
+			int moda,qtdmoda;
+			int lin = img.length;
+			int col = img[0].length;
+			int img2[][] = new int[lin][col];
+			for (int i=2;i<img.length-2;i++){
+				for (int j=2;j<img[i].length-2;j++){
+					Arrays.fill( valores, 0);
+					valores[img[i-2][j-2]] ++;
+					valores[img[i-2][j-1]] ++;
+					valores[img[i-2][j]] ++;
+					valores[img[i-2][j+1]] ++;
+					valores[img[i-2][j+2]] ++;
+					valores[img[i-1][j-2]] ++;
+					valores[img[i-1][j-1]] ++;
+					valores[img[i-1][j]] ++;
+					valores[img[i-1][j+1]] ++;
+					valores[img[i-1][j+2]] ++;
+					valores[img[i][j-2]] ++;
+					valores[img[i][j-1]] ++;
+					valores[img[i][j]] ++;
+					valores[img[i][j+1]] ++;
+					valores[img[i][j+2]] ++;
+					valores[img[i+1][j-2]] ++;
+					valores[img[i+1][j-1]] ++;
+					valores[img[i+1][j]] ++;
+					valores[img[i+1][j+1]] ++;
+					valores[img[i+1][j+2]] ++;
+					valores[img[i+2][j-2]] ++;
+					valores[img[i+2][j-1]] ++;
+					valores[img[i+2][j]] ++;
+					valores[img[i+2][j+1]] ++;
+					valores[img[i+2][j+2]] ++;
+					moda = 0;
+					qtdmoda = 0;
+					for (int k=0;k<=255;k++){
+						if (qtdmoda <= valores[k]){
+							qtdmoda = valores[k];
+							moda = k;
+						}
+					}
+					img2[i][j]= tratasoma(moda);
+				}
+			}
+			return img2;
+		}
+		
+		
 		public int[][] mediana7(int[][]img){
 			int lin = img.length;
 			int col = img[0].length;
